@@ -1,20 +1,14 @@
 import Image from "next/image";
-import { Geist, Geist_Mono } from "next/font/google";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+import Menu from "../components/Menu";
 
 export default function Home() {
   return (
-    <>
-      <h1>SAIKAT</h1>
-    </>
+    <div
+      className={`flex items-center justify-start bg-zinc-50 font-sans dark:bg-black`}
+    >
+      <div className="flex">
+        <Menu />
+      </div>
+    </div>
   );
 }

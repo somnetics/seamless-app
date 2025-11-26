@@ -1,0 +1,31 @@
+{
+  "orientation": "horizontal",
+  "items": [
+    { "label": "Home", "url": "/" },
+    {
+      "label": "About",
+      "url": "/about",
+      "submenu": [
+        { "label": "Team", "url": "/about/team" },
+        { "label": "History", "url": "/about/history" },
+        { "label": "Mission", "url": "/about/mission" }
+      ]
+    },
+    { "label": "Contact", "url": "/contact" },
+    {
+      "label": "Services",
+      "url": "/services",
+      "submenu": [
+        { "label": "Web Development", "url": "/services/web-development" },
+        { "label": "Design", "url": "/services/design" },
+        { "label": "Consulting", "url": "/services/consulting" }
+      ]
+    },
+    { "label": "Blog", "url": "/blog" },
+    { "label": "FAQ", "url": "/faq" },
+    { "label": "Settings", "url": "/settings" },
+    { "label": "Layout", "url": "/layout" },
+    { "label": "Chat", "url": "/chat" },
+    { "label": "Task", "url": "/task" }
+  ]
+}
