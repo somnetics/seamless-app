@@ -24,6 +24,18 @@ const Menu = ({ className }: React.HTMLAttributes<HTMLElement>) => {
     setOpenSubmenu(openSubmenu === url ? null : url);
   };
 
+  const handleMouseEnter = (url: string) => {
+    if (orientation === "horizontal") {
+      setOpenSubmenu(url);
+    }
+  };
+
+  const handleMouseLeave = () => {
+    if (orientation === "horizontal") {
+      setOpenSubmenu(null);
+    }
+  };
+
   return (
     <nav
       className={twMerge(
@@ -42,43 +54,74 @@ const Menu = ({ className }: React.HTMLAttributes<HTMLElement>) => {
         >
           {orientation === "horizontal" ? (
             <>
-              <Link href={item.url} className="px-4 py-2 transition block">
-                {item.label}
-              </Link>
-              {item.submenu && (
-                <div className="absolute left-0 pl-4 top-full mt-1 w-48 shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-10">
-                  {item.submenu.map((subItem) => (
-                    <Link
-                      key={subItem.url}
-                      href={subItem.url}
-                      className="block px-4 py-2 hover:text-gray-400 transition"
-                    >
-                      {subItem.label}
-                    </Link>
-                  ))}
+              {item.submenu ? (
+                <div
+                  onMouseEnter={() => handleMouseEnter(item.url)}
+                  onMouseLeave={handleMouseLeave}
+                  className="relative"
+                >
+                  <button className="px-4 py-2 hover:text-gray-400 transition block cursor-pointer flex items-center">
+                    <span>{item.label}</span>
+                    <span className="ml-1">
+                      {openSubmenu === item.url ? "▲" : "▼"}
+                    </span>
+                  </button>
+                  {openSubmenu === item.url && (
+                    <div className="absolute left-0 pl-4 top-full mt-1 w-48 shadow-lg opacity-100 visible transition-all duration-200 z-10">
+                      {item.submenu.map((subItem) => (
+                        <Link
+                          key={subItem.url}
+                          href={subItem.url}
+                          className="block px-4 py-2 hover:text-gray-400 transition"
+                        >
+                          {subItem.label}
+                        </Link>
+                      ))}
+                    </div>
+                  )}
                 </div>
+              ) : (
+                <Link href={item.url} className="px-4 py-2 transition block">
+                  {item.label}
+                </Link>
               )}
             </>
           ) : (
             <>
-              <button
-                onClick={() => toggleSubmenu(item.url)}
-                className="px-4 py-2 hover:text-gray-400 transition block text-left w-full cursor-pointer"
-              >
-                {item.label}
-              </button>
-              {item.submenu && openSubmenu === item.url && (
-                <div className="w-full rounded-md shadow-lg z-10 pl-4">
-                  {item.submenu.map((subItem) => (
-                    <Link
-                      key={subItem.url}
-                      href={subItem.url}
-                      className="block px-4 py-2 hover:text-gray-400 transition"
-                    >
-                      {subItem.label}
-                    </Link>
-                  ))}
-                </div>
+              {item.submenu ? (
+                <>
+                  <button
+                    onClick={() => toggleSubmenu(item.url)}
+                    className="px-4 py-2 hover:text-gray-400 transition block text-left w-full cursor-pointer flex justify-between items-center"
+                  >
+                    <span>{item.label}</span>
+                    <span>{openSubmenu === item.url ? "▲" : "▼"}</span>
+                  </button>
+                  <div
+                    className={`w-full z-10 pl-4 transition-all duration-300 ${
+                      openSubmenu === item.url
+                        ? "max-h-96 opacity-100"
+                        : "max-h-0 opacity-0 overflow-hidden"
+                    }`}
+                  >
+                    {item.submenu.map((subItem) => (
+                      <Link
+                        key={subItem.url}
+                        href={subItem.url}
+                        className="block px-4 py-2 hover:text-gray-400 transition"
+                      >
+                        {subItem.label}
+                      </Link>
+                    ))}
+                  </div>
+                </>
+              ) : (
+                <Link
+                  href={item.url}
+                  className="px-4 py-2 hover:text-gray-400 transition block"
+                >
+                  {item.label}
+                </Link>
               )}
             </>
           )}
