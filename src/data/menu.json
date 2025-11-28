@@ -1,5 +1,5 @@
 {
-  "orientation": "vertical",
+  "orientation": "horizontal",
   "items": [
     { "label": "Home", "url": "/" },
     {

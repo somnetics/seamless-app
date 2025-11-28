@@ -1,9 +1,13 @@
+import React, { useState } from "react";
 import Menu from "../components/Menu";
 import Topmenu from "../components/Topmenu";
 import menuData from "../data/menu.json";
 
 export default function Menuwrapper() {
   const { orientation } = menuData;
+  const [collapsed, setCollapsed] = useState(false);
+
+  const toggleCollapsed = () => setCollapsed((c) => !c);
   return (
     <div
       className={`flex font-sans h-screen w-screen ${
@@ -12,15 +16,20 @@ export default function Menuwrapper() {
     >
       <Topmenu
         className={orientation === "vertical" ? "fixed top-0" : "sticky top-0"}
+        // only provide toggle/collapsed props when the layout is vertical
+        onToggle={orientation === "vertical" ? toggleCollapsed : undefined}
+        collapsed={orientation === "vertical" ? collapsed : undefined}
       />
       <div
         className={
           orientation === "vertical"
-            ? "fixed left-0 top-14 h-[calc(100vh-3rem)] bg-[#202327]"
-            : "sticky top-14 w-screen bg-[#202327] border-t border-[#3b3f47]"
+            ? `fixed left-0 top-0 h-screen bg-[#202327] transition-all duration-500 ${
+                collapsed ? "w-[150px]" : "w-[250px]"
+              }`
+            : "sticky top-13 w-screen bg-[#202327] border-t border-[#3b3f47]"
         }
       >
-        <Menu />
+        <Menu collapsed={collapsed} />
       </div>
     </div>
   );

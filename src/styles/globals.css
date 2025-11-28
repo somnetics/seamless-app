@@ -24,3 +24,19 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+nav {
+  /* overflow-x: hidden; */
+  &::-webkit-scrollbar {
+    background-color: transparent;
+    width: 2px;
+  }
+}
+nav:hover {
+  &::-webkit-scrollbar {
+    width: 2px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: rgba(256, 256, 256, 0.2);
+  }
+}
