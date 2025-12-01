@@ -90,7 +90,7 @@ const Menu = ({ className, collapsed }: MenuProps) => {
                       />
                     </button>
                     {openSubmenu === item.url && (
-                      <div className="absolute left-0 pl-0 top-full mt-0 w-48 shadow-lg opacity-100 visible transition-all duration-200 z-10 bg-[#2c2f35]">
+                      <div className="absolute left-0 pl-0 top-full mt-0 w-48 shadow-lg opacity-100 visible transition-all duration-200 z-10 bg-[#3b4655]">
                         {item.submenu.map((subItem) => (
                           <Link
                             key={subItem.url}
@@ -126,7 +126,7 @@ const Menu = ({ className, collapsed }: MenuProps) => {
                       />
                     </button>
                     <div
-                      className={`w-full bg-[#2c2f35] z-10 pl-4 transition-all duration-300 ${
+                      className={`w-full bg-[#3b4655] z-10 pl-4 transition-all duration-300 ${
                         openSubmenu === item.url
                           ? "max-h-96 opacity-100"
                           : "max-h-0 opacity-0 overflow-hidden"

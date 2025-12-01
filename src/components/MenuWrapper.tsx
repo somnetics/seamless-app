@@ -24,10 +24,10 @@ export default function Menuwrapper() {
       <div
         className={
           orientation === "vertical"
-            ? `fixed left-0 top-0 h-screen bg-[#202327] transition-all duration-500 ${
+            ? `fixed left-0 top-0 h-screen bg-[#313a46] transition-all duration-500 ${
                 collapsed ? "w-[150px]" : "w-[250px]"
               }`
-            : "sticky top-13 w-screen bg-[#202327] border-t border-[#3b3f47]"
+            : "sticky top-13 w-screen bg-[#313a46] border-t border-[#3b3f47]"
         }
       >
         <Menu collapsed={collapsed} />

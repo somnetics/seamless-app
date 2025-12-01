@@ -25,7 +25,7 @@ const Topmenu: React.FC<TopmenuProps> = ({
 
   return (
     <div
-      className={`${sizeClass} bg-[#202327] text-white p-4 z-10 min-h-[52px] ${
+      className={`${sizeClass} bg-[#313a46] text-white p-4 z-10 min-h-[52px] ${
         className || "sticky top-0"
       } flex items-center justify-between transition-all duration-500`}
     >
@@ -43,9 +43,9 @@ const Topmenu: React.FC<TopmenuProps> = ({
               </span>
               <span aria-hidden className="inline-flex items-center">
                 {collapsed ? (
-                  <MenuIcon className="transition-transform" size={18} />
-                ) : (
                   <XIcon className="transition-transform" size={18} />
+                ) : (
+                  <MenuIcon className="transition-transform" size={18} />
                 )}
               </span>
             </button>
