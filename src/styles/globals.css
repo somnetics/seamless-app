@@ -26,7 +26,6 @@ body {
 }
 
 nav {
-  /* overflow-x: hidden; */
   &::-webkit-scrollbar {
     background-color: transparent;
     width: 2px;

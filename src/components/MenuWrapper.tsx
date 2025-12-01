@@ -19,6 +19,7 @@ export default function Menuwrapper() {
         // only provide toggle/collapsed props when the layout is vertical
         onToggle={orientation === "vertical" ? toggleCollapsed : undefined}
         collapsed={orientation === "vertical" ? collapsed : undefined}
+        showLogo={orientation === "horizontal"}
       />
       <div
         className={

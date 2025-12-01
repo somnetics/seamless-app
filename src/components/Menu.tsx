@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { cva } from "class-variance-authority";
 import { twMerge } from "tailwind-merge";
 import Link from "next/link";
+import { ChevronDown } from "lucide-react";
 import menuData from "../data/menu.json";
 
 const menuVariants = cva("flex", {
@@ -49,10 +50,11 @@ const Menu = ({ className, collapsed }: MenuProps) => {
 
   return (
     <>
-      <div className="w-full flex items-center justify-start px-4 min-h-[60px]">
-        <b>LOGO</b>
-      </div>
-
+      {orientation === "vertical" ? (
+        <div className="w-full flex items-center justify-start px-4 min-h-[60px]">
+          <b>LOGO</b>
+        </div>
+      ) : null}
       <nav
         className={twMerge(
           menuVariants({
@@ -80,12 +82,15 @@ const Menu = ({ className, collapsed }: MenuProps) => {
                   >
                     <button className="px-4 py-2 hover:text-gray-400 transition cursor-pointer flex items-center">
                       <span>{item.label}</span>
-                      <span className="ml-1">
-                        {openSubmenu === item.url ? "▲" : "▼"}
-                      </span>
+                      <ChevronDown
+                        className={`ml-1 transition-transform ${
+                          openSubmenu === item.url ? "rotate-180" : ""
+                        }`}
+                        size={16}
+                      />
                     </button>
                     {openSubmenu === item.url && (
-                      <div className="absolute left-0 pl-4 top-full mt-1 w-48 shadow-lg opacity-100 visible transition-all duration-200 z-10">
+                      <div className="absolute left-0 pl-0 top-full mt-0 w-48 shadow-lg opacity-100 visible transition-all duration-200 z-10 bg-[#2c2f35]">
                         {item.submenu.map((subItem) => (
                           <Link
                             key={subItem.url}
@@ -113,10 +118,15 @@ const Menu = ({ className, collapsed }: MenuProps) => {
                       className="px-4 py-2 hover:text-gray-400 transition text-left w-full cursor-pointer flex justify-between items-center"
                     >
                       <span>{item.label}</span>
-                      <span>{openSubmenu === item.url ? "▲" : "▼"}</span>
+                      <ChevronDown
+                        className={`transition-transform ${
+                          openSubmenu === item.url ? "rotate-180" : ""
+                        }`}
+                        size={16}
+                      />
                     </button>
                     <div
-                      className={`w-full z-10 pl-4 transition-all duration-300 ${
+                      className={`w-full bg-[#2c2f35] z-10 pl-4 transition-all duration-300 ${
                         openSubmenu === item.url
                           ? "max-h-96 opacity-100"
                           : "max-h-0 opacity-0 overflow-hidden"

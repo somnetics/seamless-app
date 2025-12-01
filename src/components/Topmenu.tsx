@@ -1,18 +1,21 @@
 import React from "react";
+import { Menu as MenuIcon, X as XIcon } from "lucide-react";
 
 interface TopmenuProps {
   className?: string;
   collapsed?: boolean;
   onToggle?: () => void;
+  showLogo?: boolean;
 }
 
 const Topmenu: React.FC<TopmenuProps> = ({
   className,
   collapsed,
   onToggle,
+  showLogo,
 }) => {
   const isFixed = (className || "").includes("fixed");
-  // const sideMenuWidth = collapsed ? 150 : 250;
+  const sideMenuWidth = collapsed ? 150 : 250;
 
   const sizeClass = isFixed
     ? collapsed
@@ -24,23 +27,67 @@ const Topmenu: React.FC<TopmenuProps> = ({
     <div
       className={`${sizeClass} bg-[#202327] text-white p-4 z-10 min-h-[52px] ${
         className || "sticky top-0"
-      } flex items-center justify-between`}
+      } flex items-center justify-between transition-all duration-500`}
     >
-      {onToggle ? (
-        <button
-          aria-pressed={collapsed}
-          aria-label={collapsed ? "Expand menu" : "Collapse menu"}
-          onClick={onToggle}
-          className="cursor-pointer ml-4 inline-flex items-center justify-center rounded px-2 py-1 text-sm bg-white/5 hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/20"
-        >
-          <span className="sr-only">
-            {collapsed ? "Expand side menu" : "Collapse side menu"}
-          </span>
-          <span aria-hidden className="rotate-90">
-            {collapsed ? "x" : "|||"}
-          </span>
-        </button>
-      ) : null}
+      {isFixed ? (
+        <div className="flex items-center">
+          {onToggle ? (
+            <button
+              aria-pressed={collapsed}
+              aria-label={collapsed ? "Expand menu" : "Collapse menu"}
+              onClick={onToggle}
+              className="cursor-pointer mr-4 inline-flex items-center justify-center rounded px-2 py-1 text-sm bg-white/5 hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/20"
+            >
+              <span className="sr-only">
+                {collapsed ? "Expand side menu" : "Collapse side menu"}
+              </span>
+              <span aria-hidden className="inline-flex items-center">
+                {collapsed ? (
+                  <MenuIcon className="transition-transform" size={18} />
+                ) : (
+                  <XIcon className="transition-transform" size={18} />
+                )}
+              </span>
+            </button>
+          ) : null}
+
+          {showLogo ? (
+            <div className="text-sm font-bold px-2">
+              <b>LOGO</b>
+            </div>
+          ) : null}
+        </div>
+      ) : (
+        <>
+          <div className="flex items-center">
+            {showLogo ? (
+              <div className="text-sm font-bold px-2">
+                <b>LOGO</b>
+              </div>
+            ) : null}
+          </div>
+
+          {onToggle ? (
+            <button
+              aria-pressed={collapsed}
+              aria-label={collapsed ? "Expand menu" : "Collapse menu"}
+              onClick={onToggle}
+              className="cursor-pointer ml-4 inline-flex items-center justify-center rounded px-2 py-1 text-sm bg-white/5 hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/20"
+            >
+              <span className="sr-only">
+                {collapsed ? "Expand side menu" : "Collapse side menu"}
+              </span>
+              <span aria-hidden className="inline-flex items-center">
+                {collapsed ? (
+                  <MenuIcon className="transition-transform" size={18} />
+                ) : (
+                  <XIcon className="transition-transform" size={18} />
+                )}
+              </span>
+            </button>
+          ) : null}
+        </>
+      )}
     </div>
   );
 };

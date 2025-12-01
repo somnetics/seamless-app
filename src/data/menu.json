@@ -1,5 +1,5 @@
 {
-  "orientation": "horizontal",
+  "orientation": "vertical",
   "items": [
     { "label": "Home", "url": "/" },
     {
@@ -26,6 +26,8 @@
     { "label": "Settings", "url": "/settings" },
     { "label": "Layout", "url": "/layout" },
     { "label": "Chat", "url": "/chat" },
-    { "label": "Task", "url": "/task" }
+    { "label": "Task", "url": "/task" },
+    { "label": "Blog", "url": "/blog" },
+    { "label": "FAQ", "url": "/faq" }
   ]
 }
