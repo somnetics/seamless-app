@@ -1,0 +1,10 @@
+{
+  "name": "John Doe",
+  "designation": "Product Manager",
+  "items": [
+    { "label": "My Account", "url": "/account" },
+    { "label": "Settings", "url": "/settings" },
+    { "label": "Support", "url": "/support" },
+    { "label": "Logout", "url": "/logout" }
+  ]
+}
