@@ -27,7 +27,7 @@ export default function Menuwrapper() {
             ? `fixed left-0 top-0 h-screen bg-primary border-r border-background transition-all duration-500 ${
                 collapsed ? "w-[150px]" : "w-[250px]"
               }`
-            : "sticky top-13 w-screen bg-primary border-t border-background"
+            : "sticky top-13 w-screen bg-primary border-t border-background px-2"
         }
       >
         <Menu collapsed={collapsed} />

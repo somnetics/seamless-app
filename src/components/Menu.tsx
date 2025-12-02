@@ -2,7 +2,20 @@ import React, { useState } from "react";
 import { cva } from "class-variance-authority";
 import { twMerge } from "tailwind-merge";
 import Link from "next/link";
-import { ChevronDown } from "lucide-react";
+import {
+  ChevronDown,
+  ChevronRight,
+  Home,
+  Info,
+  Mail,
+  Briefcase,
+  BookOpen,
+  HelpCircle,
+  Settings,
+  Layout,
+  MessageCircle,
+  CheckSquare,
+} from "lucide-react";
 import menuData from "../data/menu.json";
 
 const menuVariants = cva("flex", {
@@ -16,6 +29,33 @@ const menuVariants = cva("flex", {
     orientation: "horizontal",
   },
 });
+
+const getIconComponent = (iconName: string) => {
+  switch (iconName) {
+    case "Home":
+      return Home;
+    case "Info":
+      return Info;
+    case "Mail":
+      return Mail;
+    case "Briefcase":
+      return Briefcase;
+    case "BookOpen":
+      return BookOpen;
+    case "HelpCircle":
+      return HelpCircle;
+    case "Settings":
+      return Settings;
+    case "Layout":
+      return Layout;
+    case "MessageCircle":
+      return MessageCircle;
+    case "CheckSquare":
+      return CheckSquare;
+    default:
+      return Home; // Default to Home icon if not found
+  }
+};
 
 interface MenuProps extends React.HTMLAttributes<HTMLElement> {
   collapsed?: boolean;
@@ -51,7 +91,7 @@ const Menu = ({ className, collapsed }: MenuProps) => {
   return (
     <>
       {orientation === "vertical" ? (
-        <div className="w-full flex items-center justify-start px-4 min-h-[60px]">
+        <div className="w-full flex items-center justify-start px-4 min-h-[76px]">
           <b>LOGO</b>
         </div>
       ) : null}
@@ -80,7 +120,18 @@ const Menu = ({ className, collapsed }: MenuProps) => {
                     onMouseLeave={handleMouseLeave}
                     className="relative"
                   >
-                    <button className="px-4 py-2 text-foreground hover:text-grayEDEDED transition cursor-pointer flex items-center text-sm">
+                    <button
+                      className={`px-4 py-2 text-foreground hover:text-grayEDEDED transition cursor-pointer flex items-center text-md ${
+                        openSubmenu === item.url ? "text-grayEDEDED" : ""
+                      }`}
+                    >
+                      {item.icon && getIconComponent(item.icon) && (
+                        <span className="mr-2">
+                          {React.createElement(getIconComponent(item.icon), {
+                            size: 16,
+                          })}
+                        </span>
+                      )}
                       <span>{item.label}</span>
                       <ChevronDown
                         className={`ml-1 transition-transform ${
@@ -95,7 +146,7 @@ const Menu = ({ className, collapsed }: MenuProps) => {
                           <Link
                             key={subItem.url}
                             href={subItem.url}
-                            className="block px-4 py-2 text-foreground hover:text-grayEDEDED transition text-sm"
+                            className="block px-4 py-2 text-foreground hover:text-grayEDEDED transition text-md"
                           >
                             {subItem.label}
                           </Link>
@@ -104,7 +155,17 @@ const Menu = ({ className, collapsed }: MenuProps) => {
                     )}
                   </div>
                 ) : (
-                  <Link href={item.url} className="px-4 py-2 transition block">
+                  <Link
+                    href={item.url}
+                    className="px-4 py-2 transition block text-md text-foreground hover:text-grayEDEDED flex items-center"
+                  >
+                    {item.icon && (
+                      <span className="mr-2">
+                        {React.createElement(getIconComponent(item.icon), {
+                          size: 16,
+                        })}
+                      </span>
+                    )}
                     {item.label}
                   </Link>
                 )}
@@ -115,12 +176,23 @@ const Menu = ({ className, collapsed }: MenuProps) => {
                   <>
                     <button
                       onClick={() => toggleSubmenu(item.url)}
-                      className="px-4 py-2 text-foreground hover:text-grayEDEDED transition text-left w-full cursor-pointer flex justify-between items-center text-sm"
+                      className={`px-4 py-2 text-foreground hover:text-grayEDEDED transition text-left w-full cursor-pointer flex justify-between items-center text-md ${
+                        openSubmenu === item.url ? "text-grayEDEDED" : ""
+                      }`}
                     >
-                      <span>{item.label}</span>
-                      <ChevronDown
+                      <div className="flex items-center">
+                        {item.icon && (
+                          <span className="mr-2">
+                            {React.createElement(getIconComponent(item.icon), {
+                              size: 16,
+                            })}
+                          </span>
+                        )}
+                        <span>{item.label}</span>
+                      </div>
+                      <ChevronRight
                         className={`transition-transform ${
-                          openSubmenu === item.url ? "rotate-180" : ""
+                          openSubmenu === item.url ? "rotate-90" : ""
                         }`}
                         size={16}
                       />
@@ -136,7 +208,7 @@ const Menu = ({ className, collapsed }: MenuProps) => {
                         <Link
                           key={subItem.url}
                           href={subItem.url}
-                          className="block px-4 py-2 text-foreground hover:text-grayEDEDED transition text-sm"
+                          className="block px-4 py-2 text-foreground hover:text-grayEDEDED transition text-md"
                         >
                           {subItem.label}
                         </Link>
@@ -146,8 +218,15 @@ const Menu = ({ className, collapsed }: MenuProps) => {
                 ) : (
                   <Link
                     href={item.url}
-                    className="px-4 py-2 text-foreground hover:text-grayEDEDED transition block text-sm"
+                    className="px-4 py-2 text-foreground hover:text-grayEDEDED transition block text-md flex items-center"
                   >
+                    {item.icon && (
+                      <span className="mr-2">
+                        {React.createElement(getIconComponent(item.icon), {
+                          size: 16,
+                        })}
+                      </span>
+                    )}
                     {item.label}
                   </Link>
                 )}

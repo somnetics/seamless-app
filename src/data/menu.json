@@ -1,33 +1,35 @@
 {
   "orientation": "vertical",
   "items": [
-    { "label": "Home", "url": "/" },
+    { "label": "Home", "url": "/", "icon": "Home" },
     {
       "label": "About",
       "url": "/about",
+      "icon": "Info",
       "submenu": [
         { "label": "Team", "url": "/about/team" },
         { "label": "History", "url": "/about/history" },
         { "label": "Mission", "url": "/about/mission" }
       ]
     },
-    { "label": "Contact", "url": "/contact" },
+    { "label": "Contact", "url": "/contact", "icon": "Mail" },
     {
       "label": "Services",
       "url": "/services",
+      "icon": "Briefcase",
       "submenu": [
         { "label": "Web Development", "url": "/services/web-development" },
         { "label": "Design", "url": "/services/design" },
         { "label": "Consulting", "url": "/services/consulting" }
       ]
     },
-    { "label": "Blog", "url": "/blog" },
-    { "label": "FAQ", "url": "/faq" },
-    { "label": "Settings", "url": "/settings" },
-    { "label": "Layout", "url": "/layout" },
-    { "label": "Chat", "url": "/chat" },
-    { "label": "Task", "url": "/task" },
-    { "label": "Blog", "url": "/blog" },
-    { "label": "FAQ", "url": "/faq" }
+    { "label": "Blog", "url": "/blog", "icon": "BookOpen" },
+    { "label": "FAQ", "url": "/faq", "icon": "HelpCircle" },
+    { "label": "Settings", "url": "/settings", "icon": "Settings" },
+    { "label": "Layout", "url": "/layout", "icon": "Layout" },
+    { "label": "Chat", "url": "/chat", "icon": "MessageCircle" },
+    { "label": "Task", "url": "/task", "icon": "CheckSquare" },
+    { "label": "Blog", "url": "/blog", "icon": "BookOpen" },
+    { "label": "FAQ", "url": "/faq", "icon": "HelpCircle" }
   ]
 }
