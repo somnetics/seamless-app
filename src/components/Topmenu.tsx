@@ -16,11 +16,11 @@ const Topmenu: React.FC<TopmenuProps> = ({
   showLogo,
 }) => {
   const isFixed = (className || "").includes("fixed");
-  const sideMenuWidth = collapsed ? 150 : 250;
+  const sideMenuWidth = collapsed ? 80 : 250;
 
   const sizeClass = isFixed
     ? collapsed
-      ? "w-[calc(100vw-150px)] left-[150px]"
+      ? "w-[calc(100vw-80px)] left-[80px]"
       : "w-[calc(100vw-250px)] left-[250px]"
     : "w-full";
 

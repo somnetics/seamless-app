@@ -63,6 +63,7 @@ interface MenuProps extends React.HTMLAttributes<HTMLElement> {
 
 const Menu = ({ className, collapsed }: MenuProps) => {
   const { orientation, items } = menuData;
+  const isVertical = orientation === "vertical";
   const [openSubmenu, setOpenSubmenu] = useState<string | null>(null);
 
   const toggleSubmenu = (url: string) => {
@@ -81,16 +82,14 @@ const Menu = ({ className, collapsed }: MenuProps) => {
     }
   };
 
-  const widthClass =
-    orientation === "vertical" ? (collapsed ? "w-[150px]" : "w-[250px]") : "";
-  const verticalScrollClass =
-    orientation === "vertical"
-      ? "overflow-y-auto h-[calc(100vh-3rem-60px)]"
-      : "";
+  const widthClass = isVertical ? (collapsed ? "w-[80px]" : "w-[250px]") : "";
+  const verticalScrollClass = isVertical
+    ? "overflow-y-auto h-[calc(100vh-3rem-60px)]"
+    : "";
 
   return (
     <>
-      {orientation === "vertical" ? (
+      {isVertical ? (
         <div className="w-full flex items-center justify-start px-4 min-h-[76px]">
           <b>LOGO</b>
         </div>
@@ -121,18 +120,26 @@ const Menu = ({ className, collapsed }: MenuProps) => {
                     className="relative"
                   >
                     <button
-                      className={`px-4 py-2 text-foreground hover:text-grayEDEDED transition cursor-pointer flex items-center text-md ${
+                      title={isVertical && collapsed ? item.label : undefined}
+                      className={`px-4 py-2 text-foreground hover:text-grayEDEDED transition cursor-pointer text-md ${
                         openSubmenu === item.url ? "text-grayEDEDED" : ""
+                      } ${
+                        isVertical && collapsed
+                          ? "flex justify-center items-center"
+                          : "flex items-center"
                       }`}
                     >
                       {item.icon && getIconComponent(item.icon) && (
-                        <span className="mr-2">
+                        <span
+                          className={`${isVertical && collapsed ? "" : "mr-2"}`}
+                        >
                           {React.createElement(getIconComponent(item.icon), {
-                            size: 16,
+                            size: 20,
                           })}
                         </span>
                       )}
-                      <span>{item.label}</span>
+                      {/* hide label when vertical + collapsed */}
+                      {!(isVertical && collapsed) && <span>{item.label}</span>}
                       <ChevronDown
                         className={`ml-1 transition-transform ${
                           openSubmenu === item.url ? "rotate-180" : ""
@@ -157,16 +164,23 @@ const Menu = ({ className, collapsed }: MenuProps) => {
                 ) : (
                   <Link
                     href={item.url}
-                    className="px-4 py-2 transition block text-md text-foreground hover:text-grayEDEDED flex items-center"
+                    title={isVertical && collapsed ? item.label : undefined}
+                    className={`px-4 py-2 transition block text-md text-foreground hover:text-grayEDEDED ${
+                      isVertical && collapsed
+                        ? "flex justify-center items-center"
+                        : "flex items-center"
+                    }`}
                   >
                     {item.icon && (
-                      <span className="mr-2">
+                      <span
+                        className={`${isVertical && collapsed ? "" : "mr-2"}`}
+                      >
                         {React.createElement(getIconComponent(item.icon), {
-                          size: 16,
+                          size: 20,
                         })}
                       </span>
                     )}
-                    {item.label}
+                    {!(isVertical && collapsed) && item.label}
                   </Link>
                 )}
               </>
@@ -175,27 +189,40 @@ const Menu = ({ className, collapsed }: MenuProps) => {
                 {item.submenu ? (
                   <>
                     <button
+                      title={isVertical && collapsed ? item.label : undefined}
                       onClick={() => toggleSubmenu(item.url)}
-                      className={`px-4 py-2 text-foreground hover:text-grayEDEDED transition text-left w-full cursor-pointer flex justify-between items-center text-md ${
+                      className={`px-4 py-2 text-foreground hover:text-grayEDEDED transition text-left w-full cursor-pointer text-md ${
                         openSubmenu === item.url ? "text-grayEDEDED" : ""
+                      } ${
+                        isVertical && collapsed
+                          ? "flex justify-center items-center"
+                          : "flex justify-between items-center"
                       }`}
                     >
                       <div className="flex items-center">
                         {item.icon && (
-                          <span className="mr-2">
+                          <span
+                            className={`${
+                              isVertical && collapsed ? "" : "mr-2"
+                            }`}
+                          >
                             {React.createElement(getIconComponent(item.icon), {
-                              size: 16,
+                              size: 20,
                             })}
                           </span>
                         )}
-                        <span>{item.label}</span>
+                        {!(isVertical && collapsed) && (
+                          <span>{item.label}</span>
+                        )}
                       </div>
-                      <ChevronRight
-                        className={`transition-transform ${
-                          openSubmenu === item.url ? "rotate-90" : ""
-                        }`}
-                        size={16}
-                      />
+                      {!(isVertical && collapsed) && (
+                        <ChevronRight
+                          className={`transition-transform ${
+                            openSubmenu === item.url ? "rotate-90" : ""
+                          }`}
+                          size={16}
+                        />
+                      )}
                     </button>
                     <div
                       className={`w-full z-10 pl-4 transition-all duration-1000 ${
@@ -208,7 +235,9 @@ const Menu = ({ className, collapsed }: MenuProps) => {
                         <Link
                           key={subItem.url}
                           href={subItem.url}
-                          className="block px-4 py-2 text-foreground hover:text-grayEDEDED transition text-md"
+                          className={`block px-4 py-2 text-foreground hover:text-grayEDEDED transition text-md ${
+                            isVertical && collapsed ? "pl-3 text-center" : ""
+                          }`}
                         >
                           {subItem.label}
                         </Link>
@@ -218,16 +247,23 @@ const Menu = ({ className, collapsed }: MenuProps) => {
                 ) : (
                   <Link
                     href={item.url}
-                    className="px-4 py-2 text-foreground hover:text-grayEDEDED transition block text-md flex items-center"
+                    title={isVertical && collapsed ? item.label : undefined}
+                    className={`px-4 py-2 text-foreground hover:text-grayEDEDED transition text-md ${
+                      isVertical && collapsed
+                        ? "flex justify-center items-center"
+                        : "flex items-center"
+                    }`}
                   >
                     {item.icon && (
-                      <span className="mr-2">
+                      <span
+                        className={`${isVertical && collapsed ? "" : "mr-2"}`}
+                      >
                         {React.createElement(getIconComponent(item.icon), {
-                          size: 16,
+                          size: 20,
                         })}
                       </span>
                     )}
-                    {item.label}
+                    {!(isVertical && collapsed) && item.label}
                   </Link>
                 )}
               </>
