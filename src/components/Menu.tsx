@@ -80,7 +80,7 @@ const Menu = ({ className, collapsed }: MenuProps) => {
                     onMouseLeave={handleMouseLeave}
                     className="relative"
                   >
-                    <button className="px-4 py-2 hover:text-gray-400 transition cursor-pointer flex items-center">
+                    <button className="px-4 py-2 text-foreground hover:text-grayEDEDED transition cursor-pointer flex items-center text-sm">
                       <span>{item.label}</span>
                       <ChevronDown
                         className={`ml-1 transition-transform ${
@@ -90,12 +90,12 @@ const Menu = ({ className, collapsed }: MenuProps) => {
                       />
                     </button>
                     {openSubmenu === item.url && (
-                      <div className="absolute left-0 pl-0 top-full mt-0 w-48 shadow-lg opacity-100 visible transition-all duration-200 z-10 bg-[#3b4655]">
+                      <div className="absolute left-0 pl-0 top-full mt-0 w-48 shadow-lg opacity-100 visible transition-all duration-200 z-10 border border-primary">
                         {item.submenu.map((subItem) => (
                           <Link
                             key={subItem.url}
                             href={subItem.url}
-                            className="block px-4 py-2 hover:text-gray-400 transition"
+                            className="block px-4 py-2 text-foreground hover:text-grayEDEDED transition text-sm"
                           >
                             {subItem.label}
                           </Link>
@@ -115,7 +115,7 @@ const Menu = ({ className, collapsed }: MenuProps) => {
                   <>
                     <button
                       onClick={() => toggleSubmenu(item.url)}
-                      className="px-4 py-2 hover:text-gray-400 transition text-left w-full cursor-pointer flex justify-between items-center"
+                      className="px-4 py-2 text-foreground hover:text-grayEDEDED transition text-left w-full cursor-pointer flex justify-between items-center text-sm"
                     >
                       <span>{item.label}</span>
                       <ChevronDown
@@ -126,7 +126,7 @@ const Menu = ({ className, collapsed }: MenuProps) => {
                       />
                     </button>
                     <div
-                      className={`w-full bg-[#3b4655] z-10 pl-4 transition-all duration-300 ${
+                      className={`w-full z-10 pl-4 transition-all duration-1000 ${
                         openSubmenu === item.url
                           ? "max-h-96 opacity-100"
                           : "max-h-0 opacity-0 overflow-hidden"
@@ -136,7 +136,7 @@ const Menu = ({ className, collapsed }: MenuProps) => {
                         <Link
                           key={subItem.url}
                           href={subItem.url}
-                          className="block px-4 py-2 hover:text-gray-400 transition"
+                          className="block px-4 py-2 text-foreground hover:text-grayEDEDED transition text-sm"
                         >
                           {subItem.label}
                         </Link>
@@ -146,7 +146,7 @@ const Menu = ({ className, collapsed }: MenuProps) => {
                 ) : (
                   <Link
                     href={item.url}
-                    className="px-4 py-2 hover:text-gray-400 transition block"
+                    className="px-4 py-2 text-foreground hover:text-grayEDEDED transition block text-sm"
                   >
                     {item.label}
                   </Link>

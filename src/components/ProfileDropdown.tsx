@@ -21,15 +21,15 @@ export default function ProfileDropdown() {
       <button
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
-        className="inline-flex items-center gap-3 rounded px-2 py-1 bg-white/5 hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/20"
+        className="inline-flex items-center gap-3 px-2 py-1 focus:outline-none text-foreground"
       >
-        <User size={18} />
+        <User size={22} />
 
         <div className="flex flex-col text-left leading-tight">
-          <span className="text-sm font-medium text-white">
+          <span className="text-sm font-medium text-foreground">
             {(profileData as any).name || "User"}
           </span>
-          <span className="text-xs text-white/70">
+          <span className="text-xs">
             {(profileData as any).designation || ""}
           </span>
         </div>
@@ -41,7 +41,7 @@ export default function ProfileDropdown() {
       </button>
 
       {open && (
-        <div className="absolute right-0 mt-2 w-44 bg-white text-zinc-900 dark:bg-[#3b4655] dark:text-zinc-100 rounded shadow-lg z-30">
+        <div className="absolute right-0 mt-5 w-44 border border-gray-700 dark:bg-primary dark:text-zinc-100 rounded shadow-lg z-30 text-sm">
           <ul className="py-1">
             {profileData.items.map((it) => (
               <li key={it.label}>
@@ -50,14 +50,14 @@ export default function ProfileDropdown() {
                     onClick={() => {
                       setOpen(false);
                     }}
-                    className="w-full text-left px-4 py-2 dark:hover:text-red-400 cursor-pointer"
+                    className="w-full text-left px-4 py-2 dark:hover:text-red-400 cursor-pointer text-foreground"
                   >
                     {it.label}
                   </button>
                 ) : (
                   <Link
                     href={it.url}
-                    className="block px-4 py-2 dark:hover:bg-[#4a586b]"
+                    className="block px-4 py-2 dark:hover:bg-gray-700 cursor-pointer text-foreground"
                     onClick={() => setOpen(false)}
                   >
                     {it.label}

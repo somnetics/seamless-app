@@ -26,7 +26,7 @@ const Topmenu: React.FC<TopmenuProps> = ({
 
   return (
     <div
-      className={`${sizeClass} bg-[#313a46] text-white p-4 z-10 min-h-[52px] ${
+      className={`${sizeClass} bg-primary text-white p-4 z-10 min-h-[52px] ${
         className || "sticky top-0"
       } flex items-center justify-between transition-all duration-500`}
     >
@@ -37,16 +37,22 @@ const Topmenu: React.FC<TopmenuProps> = ({
               aria-pressed={collapsed}
               aria-label={collapsed ? "Expand menu" : "Collapse menu"}
               onClick={onToggle}
-              className="cursor-pointer mr-4 inline-flex items-center justify-center rounded px-2 py-1 text-sm bg-white/5 hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/20"
+              className="cursor-pointer mr-4 inline-flex items-center justify-center rounded px-2 py-1 text-sm focus:outline-none"
             >
               <span className="sr-only">
                 {collapsed ? "Expand side menu" : "Collapse side menu"}
               </span>
               <span aria-hidden className="inline-flex items-center">
                 {collapsed ? (
-                  <XIcon className="transition-transform" size={18} />
+                  <XIcon
+                    className="transition-all text-foreground hover:text-grayEDEDED"
+                    size={22}
+                  />
                 ) : (
-                  <MenuIcon className="transition-transform" size={18} />
+                  <MenuIcon
+                    className="transition-all text-foreground hover:text-grayEDEDED"
+                    size={22}
+                  />
                 )}
               </span>
             </button>
@@ -73,7 +79,7 @@ const Topmenu: React.FC<TopmenuProps> = ({
               aria-pressed={collapsed}
               aria-label={collapsed ? "Expand menu" : "Collapse menu"}
               onClick={onToggle}
-              className="cursor-pointer ml-4 inline-flex items-center justify-center rounded px-2 py-1 text-sm bg-white/5 hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/20"
+              className="cursor-pointer ml-4 inline-flex items-center justify-center rounded px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-white/20"
             >
               <span className="sr-only">
                 {collapsed ? "Expand side menu" : "Collapse side menu"}
