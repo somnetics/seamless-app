@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import Menu from "../components/Menu";
 import Topmenu from "../components/Topmenu";
 import menuData from "../data/menu.json";
@@ -6,8 +6,17 @@ import menuData from "../data/menu.json";
 export default function Menuwrapper() {
   const { orientation } = menuData;
   const [collapsed, setCollapsed] = useState(false);
+  const menuRef = useRef<any>(null);
 
-  const toggleCollapsed = () => setCollapsed((c) => !c);
+  const toggleCollapsed = () => {
+    // when collapsing, first request the Menu to close submenus immediately
+    if (!collapsed) {
+      menuRef.current?.closeSubmenusImmediate?.();
+      setCollapsed(true);
+      return;
+    }
+    setCollapsed(false);
+  };
   return (
     <div
       className={`flex font-sans h-screen w-screen ${
@@ -30,7 +39,7 @@ export default function Menuwrapper() {
             : "sticky top-13 w-screen bg-primary border-t border-background px-2"
         }
       >
-        <Menu collapsed={collapsed} />
+        <Menu ref={menuRef} collapsed={collapsed} />
       </div>
     </div>
   );
