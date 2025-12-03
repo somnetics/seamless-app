@@ -21,7 +21,7 @@ export default function ProfileDropdown() {
       <button
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
-        className="inline-flex items-center gap-3 px-2 py-1 focus:outline-none text-foreground"
+        className="inline-flex items-center gap-4 px-2 py-4 focus:outline-none text-foreground bg-gray2f3742 border-r border-l border-background"
       >
         <User size={22} />
 
@@ -41,7 +41,8 @@ export default function ProfileDropdown() {
       </button>
 
       {open && (
-        <div className="absolute right-0 mt-5 w-44 border border-gray-700 dark:bg-primary dark:text-zinc-100 rounded shadow-lg z-30 text-sm">
+        <div className="absolute right-0 mt-1 w-44 border border-gray-700 dark:bg-primary dark:text-zinc-100 rounded shadow-lg z-30 text-sm">
+          <strong className="pt-2 px-3 flex text-foreground">Welcome !</strong>
           <ul className="py-1">
             {profileData.items.map((it) => (
               <li key={it.label}>

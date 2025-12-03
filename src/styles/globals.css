@@ -5,7 +5,6 @@
   --background: #ffffff;
   --foreground: #171717;
   --bg212529: #212529;
-  /* --primary-color: #313a46; */
 }
 
 @media (prefers-color-scheme: dark) {
@@ -14,6 +13,7 @@
     --foreground: #9ca3af;
     --primary-color: #313a46;
     --grayEDEDED: #ededed;
+    --gray2f3742: #2f3742;
   }
 }
 
@@ -21,6 +21,7 @@
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-grayEDEDED: var(--grayEDEDED);
+  --color-gray2f3742: var(--gray2f3742);
   --color-primary: var(--primary-color);
   --font-sans: var(--font-geist-sans);
   /* --font-mono: var(--font-geist-mono); */
