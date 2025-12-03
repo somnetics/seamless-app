@@ -16,7 +16,7 @@ const Topmenu: React.FC<TopmenuProps> = ({
   showLogo,
 }) => {
   const isFixed = (className || "").includes("fixed");
-  const sideMenuWidth = collapsed ? 80 : 250;
+  const sideMenuWidth = collapsed ? 150 : 250;
 
   const sizeClass = isFixed
     ? collapsed
@@ -28,7 +28,7 @@ const Topmenu: React.FC<TopmenuProps> = ({
     <div
       className={`${sizeClass} bg-primary text-white p-4 z-10 min-h-[52px] ${
         className || "sticky top-0"
-      } flex items-center justify-between transition-all duration-500`}
+      } flex items-center justify-between transition-all duration-500 shadow-md`}
     >
       {isFixed ? (
         <div className="flex items-center">

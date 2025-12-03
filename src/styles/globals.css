@@ -4,8 +4,8 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
-  /* --primary-color: #313a46; */
   --bg212529: #212529;
+  /* --primary-color: #313a46; */
 }
 
 @media (prefers-color-scheme: dark) {
@@ -30,16 +30,17 @@ body {
   background: var(--color-background);
   color: var(--color-foreground);
   font-family: "Figtree", sans-serif;
+  overflow-x: hidden;
   /* font-family: var(--font-mono); */
 }
 
-nav {
+aside {
   &::-webkit-scrollbar {
     background-color: transparent;
     width: 2px;
   }
 }
-nav:hover {
+aside:hover {
   &::-webkit-scrollbar {
     width: 2px;
   }

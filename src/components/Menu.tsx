@@ -3,10 +3,11 @@ import React, {
   useEffect,
   forwardRef,
   useImperativeHandle,
+  useRef,
 } from "react";
-import { cva } from "class-variance-authority";
-import { twMerge } from "tailwind-merge";
+import { createPortal } from "react-dom";
 import Link from "next/link";
+import { twMerge } from "tailwind-merge";
 import {
   ChevronDown,
   ChevronRight,
@@ -23,19 +24,23 @@ import {
 } from "lucide-react";
 import menuData from "../data/menu.json";
 
-const menuVariants = cva("flex", {
-  variants: {
-    orientation: {
-      horizontal: "flex-row space-x-4",
-      vertical: "flex-col space-y-2",
-    },
-  },
-  defaultVariants: {
-    orientation: "horizontal",
-  },
-});
+type MenuItem = {
+  url: string;
+  label: string;
+  icon?: string;
+  submenu?: Array<{ url: string; label: string }>;
+};
 
-const getIconComponent = (iconName: string) => {
+interface MenuProps {
+  collapsed?: boolean;
+  className?: string;
+}
+
+export type MenuHandle = {
+  closeSubmenusImmediate: () => void;
+};
+
+const getIconComponent = (iconName?: string) => {
   switch (iconName) {
     case "Home":
       return Home;
@@ -58,266 +63,290 @@ const getIconComponent = (iconName: string) => {
     case "CheckSquare":
       return CheckSquare;
     default:
-      return Home; // Default to Home icon if not found
+      return Home;
   }
 };
 
-interface MenuProps extends React.HTMLAttributes<HTMLElement> {
-  collapsed?: boolean;
-}
-
-const Menu = forwardRef<any, MenuProps>(
-  ({ className, collapsed }: MenuProps, ref) => {
-    const { orientation, items } = menuData;
+const Menu = forwardRef<MenuHandle, MenuProps>(
+  ({ collapsed = false, className }, ref) => {
+    const { orientation = "vertical", items = [] as MenuItem[] } =
+      (menuData as any) || {};
     const isVertical = orientation === "vertical";
+
     const [openSubmenu, setOpenSubmenu] = useState<string | null>(null);
-    // when true, submenu containers will not animate so they close immediately
     const [disableSubmenuTransition, setDisableSubmenuTransition] =
       useState(false);
-
-    const toggleSubmenu = (url: string) => {
-      setOpenSubmenu(openSubmenu === url ? null : url);
-    };
-
-    // Close any open submenu when the menu becomes collapsed
-    useEffect(() => {
-      if (collapsed) {
-        setOpenSubmenu(null);
-      }
-    }, [collapsed]);
-
-    const handleMouseEnter = (url: string) => {
-      if (orientation === "horizontal") {
-        setOpenSubmenu(url);
-      }
-    };
-
-    const handleMouseLeave = () => {
-      if (orientation === "horizontal") {
-        setOpenSubmenu(null);
-      }
-    };
-
-    const widthClass = isVertical ? (collapsed ? "w-[80px]" : "w-[250px]") : "";
-    const verticalScrollClass = isVertical
-      ? "overflow-y-auto h-[calc(100vh-3rem-60px)]"
-      : "";
+    const submenuContainerRef = useRef<HTMLDivElement | null>(null);
+    const buttonRefs = useRef<Record<string, HTMLButtonElement | null>>({});
 
     useImperativeHandle(ref, () => ({
-      closeSubmenus: () => setOpenSubmenu(null),
-      // close immediately without transition
       closeSubmenusImmediate: () => {
+        if (!openSubmenu) return;
         setDisableSubmenuTransition(true);
         setOpenSubmenu(null);
-        // restore transitions on next tick
-        window.setTimeout(() => setDisableSubmenuTransition(false), 50);
+        setTimeout(() => setDisableSubmenuTransition(false), 50);
       },
     }));
 
-    return (
-      <>
-        {isVertical ? (
-          <div className="w-full flex items-center justify-start px-4 min-h-[76px]">
-            <b>LOGO</b>
-          </div>
-        ) : null}
-        <nav
-          className={twMerge(
-            menuVariants({
-              orientation: orientation as "horizontal" | "vertical",
-            }),
-            widthClass,
-            verticalScrollClass,
-            className
-          )}
-        >
-          {items.map((item) => (
-            <div
-              key={item.url}
-              className={
-                orientation === "horizontal" ? "relative group" : "relative"
-              }
+    useEffect(() => {
+      if (collapsed) setOpenSubmenu(null);
+    }, [collapsed]);
+
+    const toggleSubmenu = (url: string) =>
+      setOpenSubmenu((s) => (s === url ? null : url));
+
+    const handleMouseEnter = (url: string) => {
+      if (isVertical && collapsed) setOpenSubmenu(url);
+    };
+    const handleMouseLeave = () => {
+      if (isVertical && collapsed) setOpenSubmenu(null);
+    };
+
+    const collapsedWidthClass = isVertical
+      ? collapsed
+        ? "w-[80px]"
+        : "w-[250px]"
+      : "w-full";
+
+    const verticalScroll = isVertical
+      ? collapsed
+        ? "overflow-visible h-auto"
+        : "overflow-y-auto h-[calc(100vh)]"
+      : "";
+
+    function SubmenuPortal({
+      anchorEl,
+      items,
+      disableTransition,
+    }: {
+      anchorEl: HTMLButtonElement | null | undefined;
+      items: Array<{ url: string; label: string }> | undefined;
+      disableTransition?: boolean;
+    }) {
+      const [rect, setRect] = useState<DOMRect | null>(null);
+
+      useEffect(() => {
+        if (!anchorEl) return;
+        const update = () => {
+          try {
+            const r = anchorEl.getBoundingClientRect();
+            setRect(r);
+          } catch (e) {
+            // ignore
+          }
+        };
+        update();
+        window.addEventListener("scroll", update, true);
+        window.addEventListener("resize", update);
+        return () => {
+          window.removeEventListener("scroll", update, true);
+          window.removeEventListener("resize", update);
+        };
+      }, [anchorEl]);
+
+      if (!rect || !items || typeof document === "undefined") return null;
+
+      const style: React.CSSProperties = {
+        position: "fixed",
+        left: rect.right,
+        top: rect.top,
+        width: 224,
+        zIndex: 9999,
+      };
+
+      const cls =
+        "bg-background text-foreground rounded shadow-lg border border-gray-700 dark:bg-primary dark:text-zinc-100" +
+        (disableTransition ? "transition-none" : "transition-all duration-200");
+
+      return createPortal(
+        <div style={style} className={cls}>
+          {items.map((s) => (
+            <Link
+              key={s.url}
+              href={s.url}
+              className="block px-4 py-2 hover:text-grayEDEDED"
             >
-              {orientation === "horizontal" ? (
-                <>
-                  {item.submenu ? (
-                    <div
-                      onMouseEnter={() => handleMouseEnter(item.url)}
-                      onMouseLeave={handleMouseLeave}
-                      className="relative"
-                    >
-                      <button
-                        title={isVertical && collapsed ? item.label : undefined}
-                        className={`px-4 py-2 text-foreground hover:text-grayEDEDED transition cursor-pointer text-md ${
-                          openSubmenu === item.url ? "text-grayEDEDED" : ""
-                        } ${
-                          isVertical && collapsed
-                            ? "flex justify-center items-center"
-                            : "flex items-center"
-                        }`}
-                      >
-                        {item.icon && getIconComponent(item.icon) && (
-                          <span
-                            className={`${
-                              isVertical && collapsed ? "" : "mr-4"
-                            }`}
-                          >
-                            {React.createElement(getIconComponent(item.icon), {
-                              size: 20,
-                            })}
-                          </span>
-                        )}
-                        {/* hide label when vertical + collapsed */}
-                        {!(isVertical && collapsed) && (
-                          <span>{item.label}</span>
-                        )}
-                        <ChevronDown
-                          className={`ml-1 transition-transform ${
-                            openSubmenu === item.url ? "rotate-180" : ""
-                          }`}
-                          size={16}
-                        />
-                      </button>
-                      {openSubmenu === item.url && (
-                        <div
-                          className={`absolute left-0 pl-0 top-full mt-0 w-48 shadow-lg opacity-100 visible ${
-                            disableSubmenuTransition
-                              ? "transition-none"
-                              : "transition-all duration-200"
-                          } z-10 border border-primary`}
-                        >
-                          {item.submenu.map((subItem) => (
-                            <Link
-                              key={subItem.url}
-                              href={subItem.url}
-                              className="block px-4 py-2 text-foreground hover:text-grayEDEDED transition text-md"
-                            >
-                              {subItem.label}
-                            </Link>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  ) : (
-                    <Link
-                      href={item.url}
-                      title={isVertical && collapsed ? item.label : undefined}
-                      className={`px-4 py-2 transition block text-md text-foreground hover:text-grayEDEDED ${
-                        isVertical && collapsed
-                          ? "flex justify-center items-center"
-                          : "flex items-center"
-                      }`}
-                    >
-                      {item.icon && (
-                        <span
-                          className={`${isVertical && collapsed ? "" : "mr-4"}`}
-                        >
-                          {React.createElement(getIconComponent(item.icon), {
-                            size: 20,
-                          })}
-                        </span>
-                      )}
-                      {!(isVertical && collapsed) && item.label}
-                    </Link>
-                  )}
-                </>
-              ) : (
-                <>
-                  {item.submenu ? (
-                    <>
-                      <button
-                        title={isVertical && collapsed ? item.label : undefined}
-                        onClick={() => toggleSubmenu(item.url)}
-                        className={`px-4 py-2 text-foreground hover:text-grayEDEDED transition text-left w-full cursor-pointer text-md ${
-                          openSubmenu === item.url ? "text-grayEDEDED" : ""
-                        } ${
-                          isVertical && collapsed
-                            ? "flex justify-center items-center"
-                            : "flex justify-between items-center"
-                        }`}
-                      >
-                        <div className="flex items-center">
-                          {item.icon && (
-                            <span
-                              className={`${
-                                isVertical && collapsed ? "" : "mr-4"
-                              }`}
-                            >
-                              {React.createElement(
-                                getIconComponent(item.icon),
-                                {
-                                  size: 20,
-                                }
-                              )}
-                            </span>
-                          )}
-                          {!(isVertical && collapsed) && (
-                            <span>{item.label}</span>
-                          )}
-                        </div>
-                        {!(isVertical && collapsed) && (
-                          <ChevronRight
-                            className={`transition-transform ${
-                              openSubmenu === item.url ? "rotate-90" : ""
-                            }`}
-                            size={16}
-                          />
-                        )}
-                      </button>
-                      <div
-                        className={`w-full z-10 pl-8 ${
-                          disableSubmenuTransition
-                            ? "transition-none"
-                            : "transition-all duration-1000"
-                        } ${
-                          openSubmenu === item.url
-                            ? "max-h-96 opacity-100"
-                            : "max-h-0 opacity-0 overflow-hidden"
-                        }`}
-                      >
-                        {item.submenu.map((subItem) => (
-                          <Link
-                            key={subItem.url}
-                            href={subItem.url}
-                            className={`block px-4 py-2 text-foreground hover:text-grayEDEDED transition text-md ${
-                              isVertical && collapsed ? "pl-3 text-center" : ""
-                            }`}
-                          >
-                            {subItem.label}
-                          </Link>
-                        ))}
-                      </div>
-                    </>
-                  ) : (
-                    <Link
-                      href={item.url}
-                      title={isVertical && collapsed ? item.label : undefined}
-                      className={`px-4 py-2 text-foreground hover:text-grayEDEDED transition text-md ${
-                        isVertical && collapsed
-                          ? "flex justify-center items-center"
-                          : "flex items-center"
-                      }`}
-                    >
-                      {item.icon && (
-                        <span
-                          className={`${isVertical && collapsed ? "" : "mr-4"}`}
-                        >
-                          {React.createElement(getIconComponent(item.icon), {
-                            size: 20,
-                          })}
-                        </span>
-                      )}
-                      {!(isVertical && collapsed) && item.label}
-                    </Link>
-                  )}
-                </>
-              )}
-            </div>
+              {s.label}
+            </Link>
           ))}
+        </div>,
+        document.body
+      );
+    }
+
+    return (
+      <aside
+        className={twMerge(
+          "bg-primary text-md text-foreground transition-all duration-500",
+          collapsedWidthClass,
+          verticalScroll,
+          className
+        )}
+      >
+        {isVertical && (
+          <div className="sticky top-0 z-20 px-4 py-4 flex items-center h-19 justify-center bg-primary">
+            {collapsed ? (
+              <strong>LOGO</strong>
+            ) : (
+              <strong className="text-lg">LOGO</strong>
+            )}
+          </div>
+        )}
+
+        <nav
+          className={
+            isVertical
+              ? collapsed
+                ? "px-2 py-2 space-y-3 h-auto overflow-visible"
+                : "px-2 py-2 space-y-3"
+              : "flex items-center space-x-2 px-4"
+          }
+        >
+          {items.map((item: MenuItem) => {
+            const Icon = getIconComponent(item.icon);
+            const hasSub =
+              Array.isArray(item.submenu) && item.submenu.length > 0;
+            const isActive = openSubmenu === item.url;
+
+            if (isVertical && collapsed) {
+              return (
+                <div
+                  key={item.url}
+                  className="relative"
+                  onMouseEnter={() => handleMouseEnter(item.url)}
+                  onMouseLeave={handleMouseLeave}
+                >
+                  <button
+                    ref={(el) => {
+                      buttonRefs.current[item.url] = el;
+                    }}
+                    title={item.label}
+                    className={`w-full flex items-center justify-center p-3 rounded hover:bg-muted cursor-pointer text-foreground hover:text-grayEDEDED transition-all duration-300 ${
+                      isActive ? "bg-muted" : ""
+                    }`}
+                    onClick={() =>
+                      hasSub ? toggleSubmenu(item.url) : undefined
+                    }
+                  >
+                    <Icon size={20} />
+                  </button>
+
+                  {hasSub && openSubmenu === item.url && (
+                    <SubmenuPortal
+                      anchorEl={buttonRefs.current[item.url]}
+                      items={item.submenu}
+                      disableTransition={disableSubmenuTransition}
+                    />
+                  )}
+                </div>
+              );
+            }
+
+            if (isVertical && !collapsed) {
+              return (
+                <div key={item.url}>
+                  <div
+                    className={`flex items-center justify-between px-3 py-2 rounded hover:text-grayEDEDED cursor-pointer transition-all duration-300 ${
+                      isActive ? "bg-muted" : ""
+                    }`}
+                    onClick={() =>
+                      hasSub ? toggleSubmenu(item.url) : undefined
+                    }
+                  >
+                    <div className="flex items-center gap-3">
+                      <Icon size={18} />
+                      <span>{item.label}</span>
+                    </div>
+                    {hasSub && (
+                      <ChevronRight
+                        size={16}
+                        className={
+                          openSubmenu === item.url
+                            ? "rotate-90 transition-transform"
+                            : "transition-transform"
+                        }
+                      />
+                    )}
+                  </div>
+
+                  {hasSub && (
+                    <div
+                      className={
+                        (disableSubmenuTransition
+                          ? "transition-none "
+                          : "transition-all duration-300 ") +
+                        (openSubmenu === item.url
+                          ? "max-h-96 opacity-100"
+                          : "max-h-0 opacity-0 overflow-hidden") +
+                        " pl-8"
+                      }
+                    >
+                      {item.submenu!.map((s) => (
+                        <Link
+                          key={s.url}
+                          href={s.url}
+                          className="block px-3 py-2 hover:text-grayEDEDED rounded"
+                        >
+                          {s.label}
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              );
+            }
+
+            // horizontal/default
+            return (
+              <div key={item.url} className="relative">
+                <div
+                  className={`flex items-center gap-2 px-2 py-2 rounded hover:bg-muted cursor-pointer ${
+                    isActive ? "bg-muted" : ""
+                  }`}
+                  onClick={() => (hasSub ? toggleSubmenu(item.url) : undefined)}
+                >
+                  <Icon size={18} />
+                  <span>{item.label}</span>
+                  {hasSub && (
+                    <ChevronDown
+                      size={14}
+                      className={
+                        openSubmenu === item.url
+                          ? "rotate-180 transition-transform ml-1"
+                          : "transition-transform ml-1"
+                      }
+                    />
+                  )}
+                </div>
+
+                {hasSub && openSubmenu === item.url && (
+                  <div
+                    className={
+                      "absolute left-0 top-full mt-1 w-48 bg-background text-foreground rounded shadow-lg z-40 " +
+                      (disableSubmenuTransition
+                        ? "transition-none"
+                        : "transition-all duration-200")
+                    }
+                  >
+                    {item.submenu!.map((s) => (
+                      <Link
+                        key={s.url}
+                        href={s.url}
+                        className="block px-4 py-2 hover:bg-muted"
+                      >
+                        {s.label}
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </div>
+            );
+          })}
         </nav>
-      </>
+      </aside>
     );
   }
 );
 
+Menu.displayName = "Menu";
 export default Menu;

@@ -19,13 +19,12 @@ export default function Menuwrapper() {
   };
   return (
     <div
-      className={`flex font-sans h-screen w-screen ${
+      className={`flex font-sans h-screen w-screen shadow-r-md ${
         orientation === "vertical" ? "flex-row" : "flex-col"
       }`}
     >
       <Topmenu
         className={orientation === "vertical" ? "fixed top-0" : "sticky top-0"}
-        // only provide toggle/collapsed props when the layout is vertical
         onToggle={orientation === "vertical" ? toggleCollapsed : undefined}
         collapsed={orientation === "vertical" ? collapsed : undefined}
         showLogo={orientation === "horizontal"}
@@ -33,7 +32,7 @@ export default function Menuwrapper() {
       <div
         className={
           orientation === "vertical"
-            ? `fixed left-0 top-0 h-screen bg-primary border-r border-background transition-all duration-500 ${
+            ? `sticky left-0 top-0 h-screen bg-primary border-r border-background transition-all duration-500 ${
                 collapsed ? "w-[80px]" : "w-[250px]"
               }`
             : "sticky top-13 w-screen bg-primary border-t border-background px-2"
