@@ -131,9 +131,7 @@ const Menu = forwardRef<MenuHandle, MenuProps>(
           try {
             const r = anchorEl.getBoundingClientRect();
             setRect(r);
-          } catch (e) {
-            // ignore
-          }
+          } catch (e) {}
         };
         update();
         window.addEventListener("scroll", update, true);
@@ -222,7 +220,7 @@ const Menu = forwardRef<MenuHandle, MenuProps>(
                     }}
                     title={item.label}
                     className={`w-full flex items-center justify-center p-3 rounded hover:bg-muted cursor-pointer text-foreground hover:text-grayEDEDED transition-all duration-300 ${
-                      isActive ? "bg-muted" : ""
+                      isActive ? "bg-muted text-grayEDEDED" : ""
                     }`}
                     onClick={() =>
                       hasSub ? toggleSubmenu(item.url) : undefined
@@ -247,7 +245,7 @@ const Menu = forwardRef<MenuHandle, MenuProps>(
                 <div key={item.url}>
                   <div
                     className={`flex items-center justify-between px-3 py-2 rounded hover:text-grayEDEDED cursor-pointer transition-all duration-300 ${
-                      isActive ? "bg-muted" : ""
+                      isActive ? "bg-muted text-grayEDEDED" : ""
                     }`}
                     onClick={() =>
                       hasSub ? toggleSubmenu(item.url) : undefined
@@ -301,7 +299,7 @@ const Menu = forwardRef<MenuHandle, MenuProps>(
               <div key={item.url} className="relative">
                 <div
                   className={`flex items-center gap-2 px-2 py-2 rounded hover:bg-muted cursor-pointer ${
-                    isActive ? "bg-muted" : ""
+                    isActive ? "bg-muted text-grayEDEDED" : ""
                   }`}
                   onClick={() => (hasSub ? toggleSubmenu(item.url) : undefined)}
                 >

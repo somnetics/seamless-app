@@ -9,7 +9,6 @@ export default function Menuwrapper() {
   const menuRef = useRef<any>(null);
 
   const toggleCollapsed = () => {
-    // when collapsing, first request the Menu to close submenus immediately
     if (!collapsed) {
       menuRef.current?.closeSubmenusImmediate?.();
       setCollapsed(true);
