@@ -76,7 +76,6 @@ const Menu = forwardRef<MenuHandle, MenuProps>(
     const [openSubmenu, setOpenSubmenu] = useState<string | null>(null);
     const [disableSubmenuTransition, setDisableSubmenuTransition] =
       useState(false);
-    const submenuContainerRef = useRef<HTMLDivElement | null>(null);
     const buttonRefs = useRef<Record<string, HTMLButtonElement | null>>({});
 
     useImperativeHandle(ref, () => ({
@@ -298,7 +297,7 @@ const Menu = forwardRef<MenuHandle, MenuProps>(
             return (
               <div key={item.url} className="relative">
                 <div
-                  className={`flex items-center gap-2 px-2 py-2 rounded hover:bg-muted cursor-pointer hover:text-grayEDEDED ${
+                  className={`flex items-center gap-2 px-2 py-2 rounded cursor-pointer hover:text-grayEDEDED ${
                     isActive ? "bg-muted text-grayEDEDED" : ""
                   }`}
                   onClick={() => (hasSub ? toggleSubmenu(item.url) : undefined)}
@@ -320,17 +319,17 @@ const Menu = forwardRef<MenuHandle, MenuProps>(
                 {hasSub && openSubmenu === item.url && (
                   <div
                     className={
-                      "absolute left-0 top-full mt-1 w-48 bg-background text-foreground rounded shadow-lg z-40 " +
+                      "absolute left-0 top-full mt-1 w-48 bg-background text-foreground rounded shadow-lg z-40" +
                       (disableSubmenuTransition
                         ? "transition-none"
-                        : "transition-all duration-200")
+                        : "transition-all duration-200 border border-gray-700")
                     }
                   >
                     {item.submenu!.map((s) => (
                       <Link
                         key={s.url}
                         href={s.url}
-                        className="block px-4 py-2 hover:text-grayEDEDED"
+                        className="block px-4 py-2 hover:text-grayEDEDED text-sm"
                       >
                         {s.label}
                       </Link>

@@ -24,7 +24,6 @@
   --color-gray2f3742: var(--gray2f3742);
   --color-primary: var(--primary-color);
   --font-sans: var(--font-geist-sans);
-  /* --font-mono: var(--font-geist-mono); */
 }
 
 body {
@@ -32,7 +31,6 @@ body {
   color: var(--color-foreground);
   font-family: "Figtree", sans-serif;
   overflow-x: hidden;
-  /* font-family: var(--font-mono); */
 }
 
 aside {

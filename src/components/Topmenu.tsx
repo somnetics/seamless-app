@@ -2,6 +2,7 @@ import React from "react";
 import { Menu as MenuIcon, X as XIcon } from "lucide-react";
 import Notification from "./Notification";
 import ProfileDropdown from "./ProfileDropdown";
+import menuData from "../data/menu.json";
 
 interface TopmenuProps {
   className?: string;
@@ -17,7 +18,7 @@ const Topmenu: React.FC<TopmenuProps> = ({
   showLogo,
 }) => {
   const isFixed = (className || "").includes("fixed");
-  // const sideMenuWidth = collapsed ? 150 : 250;
+  const isHorizontal = (menuData as any).orientation === "horizontal";
 
   const sizeClass = isFixed
     ? collapsed
@@ -43,19 +44,10 @@ const Topmenu: React.FC<TopmenuProps> = ({
               <span className="sr-only">
                 {collapsed ? "Expand side menu" : "Collapse side menu"}
               </span>
-              <span aria-hidden className="inline-flex items-center">
-                {collapsed ? (
-                  <MenuIcon
-                    className="transition-all text-foreground hover:text-grayEDEDED"
-                    size={22}
-                  />
-                ) : (
-                  <MenuIcon
-                    className="transition-all text-foreground hover:text-grayEDEDED"
-                    size={22}
-                  />
-                )}
-              </span>
+              <MenuIcon
+                className="transition-all text-foreground hover:text-grayEDEDED"
+                size={22}
+              />
             </button>
           ) : null}
 
@@ -75,27 +67,26 @@ const Topmenu: React.FC<TopmenuProps> = ({
             ) : null}
           </div>
 
-          {onToggle ? (
-            <button
-              aria-pressed={collapsed}
-              aria-label={collapsed ? "Expand menu" : "Collapse menu"}
-              onClick={onToggle}
-              className="cursor-pointer ml-4 inline-flex items-center justify-center rounded px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-white/20"
-            >
-              <span className="sr-only">
-                {collapsed ? "Expand side menu" : "Collapse side menu"}
-              </span>
-              <span aria-hidden className="inline-flex items-center">
-                {collapsed ? (
-                  <MenuIcon className="transition-transform" size={18} />
-                ) : (
-                  <MenuIcon className="transition-transform" size={18} />
-                )}
-              </span>
-            </button>
-          ) : null}
-          <Notification />
-          <ProfileDropdown />
+          <div className="flex items-center gap-4">
+            {onToggle ? (
+              <button
+                aria-pressed={collapsed}
+                aria-label={collapsed ? "Expand menu" : "Collapse menu"}
+                onClick={onToggle}
+                className="cursor-pointer inline-flex items-center justify-center rounded px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-white/20"
+              >
+                <span className="sr-only">
+                  {collapsed ? "Expand side menu" : "Collapse side menu"}
+                </span>
+                <MenuIcon className="transition-transform" size={18} />
+              </button>
+            ) : null}
+          </div>
+
+          <div className="flex items-center gap-4">
+            <Notification />
+            <ProfileDropdown />
+          </div>
         </>
       )}
       {!isFixed ? null : (

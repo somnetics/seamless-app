@@ -18,7 +18,7 @@ export default function Menuwrapper() {
   };
   return (
     <div
-      className={`flex font-sans h-screen w-screen shadow-r-md ${
+      className={`flex font-sans h-screen w-screen ${
         orientation === "vertical" ? "flex-row" : "flex-col"
       }`}
     >
