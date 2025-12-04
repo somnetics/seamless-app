@@ -272,7 +272,7 @@ const Menu = forwardRef<MenuHandle, MenuProps>(
                       className={
                         (disableSubmenuTransition
                           ? "transition-none "
-                          : "transition-all duration-300 ") +
+                          : "transition-all duration-500 ") +
                         (openSubmenu === item.url
                           ? "max-h-96 opacity-100"
                           : "max-h-0 opacity-0 overflow-hidden") +

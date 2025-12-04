@@ -17,7 +17,7 @@ const Topmenu: React.FC<TopmenuProps> = ({
   showLogo,
 }) => {
   const isFixed = (className || "").includes("fixed");
-  const sideMenuWidth = collapsed ? 150 : 250;
+  // const sideMenuWidth = collapsed ? 150 : 250;
 
   const sizeClass = isFixed
     ? collapsed
@@ -89,7 +89,7 @@ const Topmenu: React.FC<TopmenuProps> = ({
                 {collapsed ? (
                   <MenuIcon className="transition-transform" size={18} />
                 ) : (
-                  <XIcon className="transition-transform" size={18} />
+                  <MenuIcon className="transition-transform" size={18} />
                 )}
               </span>
             </button>
