@@ -44,7 +44,7 @@ const Topmenu: React.FC<TopmenuProps> = ({
               </span>
               <span aria-hidden className="inline-flex items-center">
                 {collapsed ? (
-                  <XIcon
+                  <MenuIcon
                     className="transition-all text-foreground hover:text-grayEDEDED"
                     size={22}
                   />

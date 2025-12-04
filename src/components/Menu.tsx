@@ -298,7 +298,7 @@ const Menu = forwardRef<MenuHandle, MenuProps>(
             return (
               <div key={item.url} className="relative">
                 <div
-                  className={`flex items-center gap-2 px-2 py-2 rounded hover:bg-muted cursor-pointer ${
+                  className={`flex items-center gap-2 px-2 py-2 rounded hover:bg-muted cursor-pointer hover:text-grayEDEDED ${
                     isActive ? "bg-muted text-grayEDEDED" : ""
                   }`}
                   onClick={() => (hasSub ? toggleSubmenu(item.url) : undefined)}
@@ -330,7 +330,7 @@ const Menu = forwardRef<MenuHandle, MenuProps>(
                       <Link
                         key={s.url}
                         href={s.url}
-                        className="block px-4 py-2 hover:bg-muted"
+                        className="block px-4 py-2 hover:text-grayEDEDED"
                       >
                         {s.label}
                       </Link>
