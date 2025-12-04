@@ -1,5 +1,6 @@
 import React from "react";
 import { Menu as MenuIcon, X as XIcon } from "lucide-react";
+import Notification from "./Notification";
 import ProfileDropdown from "./ProfileDropdown";
 
 interface TopmenuProps {
@@ -93,10 +94,16 @@ const Topmenu: React.FC<TopmenuProps> = ({
               </span>
             </button>
           ) : null}
+          <Notification />
           <ProfileDropdown />
         </>
       )}
-      {!isFixed ? null : <ProfileDropdown />}
+      {!isFixed ? null : (
+        <div className="flex items-center gap-4">
+          <Notification />
+          <ProfileDropdown />
+        </div>
+      )}
     </div>
   );
 };
