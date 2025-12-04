@@ -28,24 +28,6 @@
     { "label": "Settings", "url": "/settings", "icon": "Settings" },
     { "label": "Layout", "url": "/layout", "icon": "Layout" },
     { "label": "Chat", "url": "/chat", "icon": "MessageCircle" },
-    { "label": "Task", "url": "/task", "icon": "CheckSquare" },
-    { "label": "Blog", "url": "/blog", "icon": "BookOpen" },
-    { "label": "FAQ", "url": "/faq", "icon": "HelpCircle" },
-    { "label": "Blog", "url": "/blog", "icon": "BookOpen" },
-    { "label": "FAQ", "url": "/faq", "icon": "HelpCircle" },
-    { "label": "Settings", "url": "/settings", "icon": "Settings" },
-    { "label": "Layout", "url": "/layout", "icon": "Layout" },
-    { "label": "Chat", "url": "/chat", "icon": "MessageCircle" },
-    { "label": "Task", "url": "/task", "icon": "CheckSquare" },
-    { "label": "Blog", "url": "/blog", "icon": "BookOpen" },
-    { "label": "FAQ", "url": "/faq", "icon": "HelpCircle" },
-    { "label": "Blog", "url": "/blog", "icon": "BookOpen" },
-    { "label": "FAQ", "url": "/faq", "icon": "HelpCircle" },
-    { "label": "Settings", "url": "/settings", "icon": "Settings" },
-    { "label": "Layout", "url": "/layout", "icon": "Layout" },
-    { "label": "Chat", "url": "/chat", "icon": "MessageCircle" },
-    { "label": "Task", "url": "/task", "icon": "CheckSquare" },
-    { "label": "Blog", "url": "/blog", "icon": "BookOpen" },
-    { "label": "FAQ", "url": "/faq", "icon": "HelpCircle" }
+    { "label": "Task", "url": "/task", "icon": "CheckSquare" }
   ]
 }

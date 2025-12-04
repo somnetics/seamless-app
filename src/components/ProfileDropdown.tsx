@@ -1,7 +1,29 @@
 import React, { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { User, ChevronDown } from "lucide-react";
+import {
+  User,
+  ChevronDown,
+  UserCircle,
+  Settings,
+  HelpCircle,
+  LogOut,
+} from "lucide-react";
 import profileData from "../data/profile.json";
+
+const getIconForLabel = (label: string) => {
+  switch (label) {
+    case "My Account":
+      return UserCircle;
+    case "Settings":
+      return Settings;
+    case "Support":
+      return HelpCircle;
+    case "Logout":
+      return LogOut;
+    default:
+      return null;
+  }
+};
 
 export default function ProfileDropdown() {
   const [open, setOpen] = useState(false);
@@ -44,28 +66,33 @@ export default function ProfileDropdown() {
         <div className="absolute right-0 mt-1 w-44 border border-gray-700 dark:bg-primary dark:text-zinc-100 rounded shadow-lg z-30 text-sm">
           <strong className="pt-2 px-3 flex text-foreground">Welcome !</strong>
           <ul className="py-1">
-            {profileData.items.map((it) => (
-              <li key={it.label}>
-                {it.label === "Logout" ? (
-                  <button
-                    onClick={() => {
-                      setOpen(false);
-                    }}
-                    className="w-full text-left px-4 py-2 dark:hover:text-red-400 cursor-pointer text-foreground"
-                  >
-                    {it.label}
-                  </button>
-                ) : (
-                  <Link
-                    href={it.url}
-                    className="block px-4 py-2 dark:hover:bg-gray-700 cursor-pointer text-foreground"
-                    onClick={() => setOpen(false)}
-                  >
-                    {it.label}
-                  </Link>
-                )}
-              </li>
-            ))}
+            {profileData.items.map((it) => {
+              const IconComponent = getIconForLabel(it.label);
+              return (
+                <li key={it.label}>
+                  {it.label === "Logout" ? (
+                    <button
+                      onClick={() => {
+                        setOpen(false);
+                      }}
+                      className="w-full text-left px-4 py-2 dark:hover:text-red-400 cursor-pointer text-foreground flex items-center gap-3"
+                    >
+                      {IconComponent && <IconComponent size={18} />}
+                      {it.label}
+                    </button>
+                  ) : (
+                    <Link
+                      href={it.url}
+                      className="flex items-center gap-3 px-4 py-2 dark:hover:bg-gray-700 cursor-pointer text-foreground"
+                      onClick={() => setOpen(false)}
+                    >
+                      {IconComponent && <IconComponent size={18} />}
+                      {it.label}
+                    </Link>
+                  )}
+                </li>
+              );
+            })}
           </ul>
         </div>
       )}
