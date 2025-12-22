@@ -47,7 +47,7 @@ export default function Notification() {
             {notifications.length > 0 && (
               <button
                 onClick={() => setNotifications([])}
-                className="text-xs text-gray-400 hover:text-foreground transition-colors"
+                className="text-xs text-gray-400 hover:text-foreground transition-colors cursor-pointer"
               >
                 Clear All
               </button>
